@@ -1,0 +1,8 @@
+{
+    "name": "mummymaze",
+    "sourcePath": "src",
+    "addonsPath": "libs/addons",
+    "vendorPath": "libs/vendor",
+    "publicPath": "public",
+    "deployPath": "deploy"
+}
