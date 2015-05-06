@@ -1,8 +1,8 @@
+var OFFSET = { x: 26, y: 18 };
 
 class Hero{
-  constructor(game){
-    this.sprite = game.add.sprite(0, 0, 'door', 'door1.png');
-    //this.sprite.scale.setTo(2, 2);
+  constructor(game, x, y, angle, opened){
+    this.sprite = game.add.sprite(x + OFFSET.x, y + OFFSET.y, 'door', opened ? 'door4.png' : 'door1.png');
     this.sprite.animations.add('open', [
       'door1.png',
       'door2.png',
@@ -16,9 +16,9 @@ class Hero{
       'door1.png'
     ], 15, false, false);
 
-    //this.sprite.angle = -90;
-    //this.sprite.anchor.set(0.5, 0.5);
-    this.sprite.animations.play('closed');
+    this.sprite.angle = angle;
+    this.sprite.anchor.set(0.5, 0.5);
+    //this.sprite.animations.play('closed');
   }
 
 }

@@ -19,6 +19,7 @@ class Preload extends PhaserGameState{
   preload (){
     this.load.image('stage', 'assets/stage.png');
     //stage_outer.png
+    this.load.json('maps', 'assets/maps.json');
     this.load.atlasJSONHash('mummy', 'assets/mummy.png', 'assets/mummy.json');
     this.load.atlasJSONHash('hero', 'assets/hero.png', 'assets/hero.json');
     this.load.atlasJSONHash('door', 'assets/door.png', 'assets/door.json');
@@ -27,40 +28,11 @@ class Preload extends PhaserGameState{
 
   create() {
     this.ready = true;
-    this.bg = this.add.image(0, 0, 'stage');
-    this.hero = new Mummy(this);
-    this.door = new Door(this);
-    //this.hero = new Hero(this);
-    cursors = this.input.keyboard.createCursorKeys();
-    this.input.onDown.add(this.onClick,this);
-  }
-
-  onClick(){
-    if (tempIndex === 1){
-      //this.door.sprite.animations.play('open');
-      this.door.sprite.animations.frameName = 'door1.png';
-      tempIndex = 0;
-    } else {
-      //this.door.sprite.animations.play('close');
-      this.door.sprite.animations.frameName = 'door4.png';
-      tempIndex = 1;
-    }
+    this.state.start('Maze');
   }
 
   update() {
-    if (cursors.up.isDown) {
-      this.hero.sprite.y--;
-      this.hero.sprite.animations.play('walk_up');
-    } else if (cursors.down.isDown) {
-      this.hero.sprite.y++;
-      this.hero.sprite.animations.play('walk_down');
-    } else if (cursors.right.isDown) {
-      this.hero.sprite.x++;
-      this.hero.sprite.animations.play('walk_right');
-    } else if (cursors.left.isDown) {
-      this.hero.sprite.x--;
-      this.hero.sprite.animations.play('walk_left');
-    }
+
   }
 };
 
