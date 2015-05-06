@@ -1,8 +1,5 @@
 import PhaserGameState from 'phaser-game-state';
 import PhaserGame from 'phaser-game';
-import Mummy from '../objects/mummy';
-import Hero from '../objects/hero';
-import Door from '../objects/door';
 
 var tempArray = ['walk_down', 'walk_right', 'walk_up', 'walk_left'];
 var tempIndex = 1;

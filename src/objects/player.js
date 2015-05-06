@@ -1,8 +1,9 @@
+var OFFSET = { x: -7, y: -12 };
 
 class Hero{
-  constructor(game){
-    this.sprite = game.add.sprite(0, 0, 'hero', 'down_stand.png');
-    //this.sprite.scale.setTo(2, 2);
+  constructor(game, x, y, direction){
+    this.sprite = game.add.sprite(x + OFFSET.x, y + OFFSET.y, 'hero', 'down_stand.png');
+
     this.sprite.animations.add('walk_down', [
       'down_walk1.png',
       'down_stand.png',
@@ -28,7 +29,22 @@ class Hero{
       'right_stand.png'
     ], 7, true, false);
 
-    this.sprite.animations.play('walk_right');
+    switch (direction){
+      case 'U':
+        this.sprite.animations.frameName = 'up_stand.png';
+        break;
+      case 'R':
+        this.sprite.animations.frameName = 'right_stand.png';
+        break;
+      case 'L':
+        this.sprite.animations.frameName = 'left_stand.png';
+        break;
+      default:
+        this.sprite.animations.frameName = 'down_stand.png';
+    }
+
+
+    //this.sprite.animations.play('walk_right');
   }
 
 }

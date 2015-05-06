@@ -1,5 +1,5 @@
 import Mummy from './mummy';
-import Hero from './hero';
+import Player from './player';
 import Door from './door';
 import Tile from './tile';
 
@@ -15,7 +15,6 @@ class map{
     this.game = game;
     this.bg = game.add.image(0, 0, 'stage');
     this.maps = game.cache.getJSON('maps').maps;
-    this.tile = [];
   }
 
   /**
@@ -24,6 +23,11 @@ class map{
    */
   load(level){
     var data = this.maps[level];
+
+    //reset the map variables
+    this.tile = [];
+    this.enemies = [];
+
     // loop through map data
     for (var y = data.length - 1; y >= 0; --y) {
       for (var x = 0; x < data[y].length; x++) {
@@ -35,25 +39,24 @@ class map{
         }
         // check tile type
         switch (tile) {
+          // add exit and entrance
+          case "E":
           case "X":
-            var angle = 0;
+            var direction = 'D';
             if (x == 0) {
-              angle = -90;
+              direction = "R";
             } else if (x == 7) {
-              angle = 90;
-            } else if (y == 0) {
-              angle = 180;
+              direction = "L";
+            } else if (y == 7) {
+              direction = "U";
             }
-            this.exit = new Door(this.game, pos.x, pos.y, angle, true);
+            this.exit = new Door(this.game, pos.x, pos.y, direction, (tile === 'X'));
             break;
           case "M":
-            break;
-          case "E":
+            this.enemies.push(new Mummy(this.game, pos.x, pos.y));
             break;
           case "P":
-            break;
-          case " ":
-          case "#":
+            this.player = new Player(this.game, pos.x, pos.y, 'D');
             break;
           default:
             this.tile[x] = this.tile[x] || [];

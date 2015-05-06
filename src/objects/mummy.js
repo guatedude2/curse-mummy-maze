@@ -1,8 +1,9 @@
+var OFFSET = { x: -7, y: -12 };
 
 class Mummy{
-  constructor(game){
-    this.sprite = game.add.sprite(0, 0, 'mummy', 'down_stand.png');
-    //this.sprite.scale.setTo(2, 2);
+  constructor(game, x, y){
+    this.sprite = game.add.sprite(x + OFFSET.x, y + OFFSET.y, 'mummy', 'down_stand.png');
+
     this.sprite.animations.add('walk_down', [
       'down_walk1.png',
       'down_stand.png',
@@ -27,7 +28,7 @@ class Mummy{
       'right_walk2.png',
       'right_stand.png'
     ], 7, true, false);
-    this.sprite.animations.play('walk_down');
+    //this.sprite.animations.play('walk_down');
   }
 
 }
