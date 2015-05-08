@@ -1,8 +1,21 @@
+import Phaser from 'phaser';
+var TILE_WIDTH = 40;
+var TILE_HEIGHT = 40;
 var OFFSET = { x: -7, y: -12 };
 
-class Hero{
-  constructor(game, x, y, direction){
-    this.sprite = game.add.sprite(x + OFFSET.x, y + OFFSET.y, 'hero', 'down_stand.png');
+class Player{
+  constructor(map, spriteName, x, y, direction){
+    this.game = map.game;
+    this.map = map;
+    this.isMoving = false;
+    this.mapPos = {x: x, y: y};
+    this.onMovingComplete = new Phaser.Signal();
+    this.sprite = this.game.add.sprite(
+      x * TILE_WIDTH + OFFSET.x,
+      y * TILE_HEIGHT + OFFSET.y,
+      spriteName,
+      'down_stand.png'
+    );
 
     this.sprite.animations.add('walk_down', [
       'down_walk1.png',
@@ -29,24 +42,74 @@ class Hero{
       'right_stand.png'
     ], 7, true, false);
 
-    switch (direction){
-      case 'U':
-        this.sprite.animations.frameName = 'up_stand.png';
-        break;
-      case 'R':
-        this.sprite.animations.frameName = 'right_stand.png';
-        break;
-      case 'L':
-        this.sprite.animations.frameName = 'left_stand.png';
-        break;
-      default:
-        this.sprite.animations.frameName = 'down_stand.png';
+  }
+
+  move(direction) {
+    if (!this.isMoving) {
+      var tweenTo = null;
+      var isWalkable = this.map.isWalkable(this.mapPos.x, this.mapPos.y, direction);
+      this.moveDirection = direction;
+      switch (direction) {
+        case 'up':
+          if (isWalkable) {
+            this.mapPos.y--;
+            this.sprite.animations.play('walk_up');
+            tweenTo = {y: this.mapPos.y * TILE_WIDTH + OFFSET.y };
+          }
+          break;
+        case 'down':
+          if (isWalkable) {
+            this.mapPos.y++;
+            this.sprite.animations.play('walk_down');
+            tweenTo = {y: this.mapPos.y * TILE_WIDTH + OFFSET.y };
+          }
+          break;
+        case 'right':
+          if (isWalkable) {
+            this.mapPos.x++;
+            this.sprite.animations.play('walk_right');
+            tweenTo = {x: this.mapPos.x * TILE_WIDTH + OFFSET.x };
+          }
+          break;
+        case 'left':
+          if (isWalkable) {
+            this.mapPos.x--;
+            this.sprite.animations.play('walk_left');
+            tweenTo = {x: this.mapPos.x * TILE_WIDTH + OFFSET.x };
+          }
+          break;
+        case 'skip':
+          this.isMoving = true;
+          this.movingComplete();
+          break;
+      }
+      if (tweenTo){
+        this.tween = this.game.add.tween(this.sprite);
+        this.tween.to(tweenTo, 400, "Linear", true);
+        this.tween.onComplete.add(this.movingComplete, this);
+        this.isMoving = true;
+      }
     }
+  }
 
+  lookAt(direction) {
+    this.sprite.animations.frameName = direction + '_stand.png';
+  }
 
-    //this.sprite.animations.play('walk_right');
+  movingComplete() {
+    if (this.tween){
+      this.sprite.animations.stop();
+      var tileSprite = this.map.tile[this.mapPos.x, this.mapPos.y].sprite;
+      if (tileSprite) {
+        tileSprite.sendToBack();
+      }
+      this.lookAt(this.moveDirection);
+      this.tween = null;
+    }
+    this.isMoving = false;
+    this.onMovingComplete.dispatch(this);
   }
 
 }
 
-export default Hero;
+export default Player;

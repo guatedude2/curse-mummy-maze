@@ -24,10 +24,6 @@ class MainMenu extends PhaserGameState{
     q.events.onInputDown.add(this.onClick,this);
   }
 
-  onClick(){
-    console.log("CLICKED"+Math.random());
-  }
-
   update () {
 
     //  Do some nice funky main menu effect here

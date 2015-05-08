@@ -1,3 +1,5 @@
+var TILE_WIDTH = 40;
+var TILE_HEIGHT = 40;
 var OFFSET = {
   "U": { x: 19, y: 10, angle: 180 },
   "R": { x: 26, y: 19, angle: -90 },
@@ -5,10 +7,14 @@ var OFFSET = {
   "L": { x: 10, y: 18, angle: 90 }
 };
 
-class Hero{
+class Door{
   constructor(game, x, y, direction, opened){
     var config = OFFSET[direction];
-    this.sprite = game.add.sprite(x + config.x, y + config.y, 'door', opened ? 'door4.png' : 'door1.png');
+    this.sprite = game.add.sprite(
+      x * TILE_WIDTH + config.x,
+      y * TILE_HEIGHT+ config.y,
+      'door', opened ? 'door4.png' : 'door1.png'
+    );
     this.sprite.animations.add('open', [
       'door1.png',
       'door2.png',
@@ -36,4 +42,4 @@ class Hero{
 
 }
 
-export default Hero;
+export default Door;

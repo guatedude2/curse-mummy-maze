@@ -1,8 +1,9 @@
 import PhaserGameState from 'phaser-game-state';
 import PhaserGame from 'phaser-game';
+import Phaser from 'phaser';
 import Map from '../objects/map';
 
-var cursors;
+var cursors, space;
 
 class Preload extends PhaserGameState{
   constructor(game) {
@@ -12,39 +13,23 @@ class Preload extends PhaserGameState{
     this.map = new Map(this);
 
     this.map.load(0);
-    //this.hero = new Mummy(this);
-    //this.door = new Door(this);
-    //this.hero = new Hero(this);
-    cursors = this.input.keyboard.createCursorKeys();
-    this.input.onDown.add(this.onClick,this);
-  }
 
-  onClick(){
-    // if (tempIndex === 1){
-    //   //this.door.sprite.animations.play('open');
-    //   this.door.sprite.animations.frameName = 'door1.png';
-    //   tempIndex = 0;
-    // } else {
-    //   //this.door.sprite.animations.play('close');
-    //   this.door.sprite.animations.frameName = 'door4.png';
-    //   tempIndex = 1;
-    // }
+    cursors = this.input.keyboard.createCursorKeys();
+    space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   }
 
   update() {
-    // if (cursors.up.isDown) {
-    //   this.hero.sprite.y--;
-    //   this.hero.sprite.animations.play('walk_up');
-    // } else if (cursors.down.isDown) {
-    //   this.hero.sprite.y++;
-    //   this.hero.sprite.animations.play('walk_down');
-    // } else if (cursors.right.isDown) {
-    //   this.hero.sprite.x++;
-    //   this.hero.sprite.animations.play('walk_right');
-    // } else if (cursors.left.isDown) {
-    //   this.hero.sprite.x--;
-    //   this.hero.sprite.animations.play('walk_left');
-    // }
+    if (cursors.up.isDown) {
+      this.map.player.move('up');
+    } else if (cursors.down.isDown) {
+      this.map.player.move('down');
+    } else if (cursors.right.isDown) {
+      this.map.player.move('right');
+    } else if (cursors.left.isDown) {
+      this.map.player.move('left');
+    } else if (space.isDown) {
+      this.map.player.move('skip');
+    }
   }
 };
 
