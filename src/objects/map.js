@@ -1,3 +1,4 @@
+import Phaser from 'phaser';
 import Player from './player';
 import Door from './door';
 import Tile from './tile';
@@ -24,6 +25,7 @@ class map{
     //reset the map variables
     this.tile = [];
     this.enemies = [];
+    this.enemyMoves = 0;
     this.mapAssetGroup = this.game.add.group();
 
     // loop through map data
@@ -51,18 +53,19 @@ class map{
               direction = "U";
             }
             this.door = new Door(this.game, x, y, direction, (tile === 'X'));
-            //this.mapAssetGroup.add(this.door[0].sprite);
             break;
           case "M": // mummy
             var enemy = new Player(this, 'mummy', x, y);
             this.enemies.unshift(enemy);
             enemy.onMovingComplete.add(this.aiMoveComplete, this);
             this.mapAssetGroup.add(enemy.sprite);
+            enemy.sprite.depth = y * 100 + 12;
             break;
           case "P": // player
             this.player = new Player(this, 'hero', x, y, 'D');
-            this.player.onMovingComplete.add(this.moveEnemies, this);
+            this.player.onMovingComplete.add(this.playerMoveComplete, this);
             this.mapAssetGroup.add(this.player.sprite);
+            this.player.sprite.depth = y * 100 + 10;
             break;
         }
         // generate board
@@ -83,19 +86,29 @@ class map{
         this.tile[x][y] = new Tile(this.game, x, y, tile, tileHex, tileSprite);
         if (this.tile[x][y].sprite) {
           this.mapAssetGroup.add(this.tile[x][y].sprite);
+          this.tile[x][y].sprite.depth = y * 100 + x;
         }
       }
     }
+    this.updateZIndexes();
+  }
+
+  updateZIndexes(){
+    this.mapAssetGroup.sort('depth', Phaser.Group.SORT_ASCENDING);
   }
 
   /**
    * trigger the movement of enemies
    */
-  moveEnemies() {
-    this.enemyMoves = 2;
-    this.enemies.forEach((enemy) => {
-      this.aiFollowPlayer(enemy);
-    });
+  playerMoveComplete() {
+    if (this.enemies.length > 0) {
+      this.enemyMoves = 2;
+      this.enemies.forEach((enemy) => {
+        this.aiFollowPlayer(enemy);
+      });
+    } else {
+      this.allFinished = true;
+    }
   }
 
   aiFollowPlayer(enemy) {
@@ -120,9 +133,9 @@ class map{
     var canMoveY = this.isWalkable(enemyPos.x, enemyPos.y, moveY);
     if (moveX && canMoveX && moveY && canMoveY) {
       if (stepsX < stepsY){
-        enemy.move(moveX);
-      }else{
         enemy.move(moveY);
+      }else{
+        enemy.move(moveX);
       }
     } else if (moveX && canMoveX){
       enemy.move(moveX);
@@ -130,6 +143,7 @@ class map{
       enemy.move(moveY);
     } else {
       enemy.lookAt(moveX || moveY);
+      this.aiMoveComplete();
     }
   }
 

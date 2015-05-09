@@ -84,6 +84,8 @@ class Player{
           break;
       }
       if (tweenTo){
+        this.sprite.depth = this.mapPos.y * 100 + 10;
+        this.map.updateZIndexes();
         this.tween = this.game.add.tween(this.sprite);
         this.tween.to(tweenTo, 400, "Linear", true);
         this.tween.onComplete.add(this.movingComplete, this);
@@ -99,10 +101,6 @@ class Player{
   movingComplete() {
     if (this.tween){
       this.sprite.animations.stop();
-      var tileSprite = this.map.tile[this.mapPos.x, this.mapPos.y].sprite;
-      if (tileSprite) {
-        tileSprite.sendToBack();
-      }
       this.lookAt(this.moveDirection);
       this.tween = null;
     }

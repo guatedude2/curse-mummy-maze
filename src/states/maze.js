@@ -19,16 +19,18 @@ class Preload extends PhaserGameState{
   }
 
   update() {
-    if (cursors.up.isDown) {
-      this.map.player.move('up');
-    } else if (cursors.down.isDown) {
-      this.map.player.move('down');
-    } else if (cursors.right.isDown) {
-      this.map.player.move('right');
-    } else if (cursors.left.isDown) {
-      this.map.player.move('left');
-    } else if (space.isDown) {
-      this.map.player.move('skip');
+    if (this.map.enemyMoves <= 1) {
+      if (cursors.up.isDown) {
+        this.map.player.move('up');
+      } else if (cursors.down.isDown) {
+        this.map.player.move('down');
+      } else if (cursors.right.isDown) {
+        this.map.player.move('right');
+      } else if (cursors.left.isDown) {
+        this.map.player.move('left');
+      } else if (space.isDown) {
+        this.map.player.move('skip');
+      }
     }
   }
 };
