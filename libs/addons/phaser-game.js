@@ -103,8 +103,8 @@ PhaserGame.screen = "small";
 PhaserGame.srx = Math.max(window.innerWidth,window.innerHeight);
 PhaserGame.sry = Math.min(window.innerWidth,window.innerHeight);
 
-PhaserGame.logicWidth = 480;
-PhaserGame.logicHeight = 320;
+PhaserGame.logicWidth = 720;
+PhaserGame.logicHeight = 1330;
 var r = PhaserGame.logicWidth/PhaserGame.logicHeight;
 if(PhaserGame.srx >= 360){
   PhaserGame.screen = "small";

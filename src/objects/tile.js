@@ -13,7 +13,6 @@ class Tile{
         'walls',
         spriteName + '.png'
       );
-      //this.sprite.z = y * 100 + (10 + x);
     }
   }
 

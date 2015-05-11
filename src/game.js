@@ -4,7 +4,8 @@ import Preloader from './states/preloader';
 import MainMenu from './states/main-menu';
 import Maze from './states/maze';
 
-var game = new Phaser.Game(PhaserGame.gameWidth,PhaserGame.gameHeight, Phaser.AUTO, 'game');
+
+var game = new Phaser.Game(317, 317 * 1330/720, Phaser.AUTO, 'game');
 
 game.antialias = false;
 

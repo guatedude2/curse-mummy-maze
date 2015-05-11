@@ -12,8 +12,6 @@ class Preload extends PhaserGameState{
   create() {
     this.map = new Map(this);
 
-    this.map.load(0);
-
     cursors = this.input.keyboard.createCursorKeys();
     space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   }

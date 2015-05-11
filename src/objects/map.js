@@ -8,29 +8,33 @@ import Tile from './tile';
  * @class map
  */
 class map{
-  constructor(game){
+  constructor(game, startLevel){
     this.game = game;
-    this.bg = game.add.image(0, 0, 'stage');
+    this.bg = game.add.image(0, 0, 'stage_bg');
+    this.fg = game.add.image(0, 0, 'stage_fg');
     this.maps = game.cache.getJSON('maps').maps;
+    this.mapAssetGroup = this.game.add.group();
     this.enemyMoving = false;
+    this.currentLevel = startLevel || 0;
+    this.loadLevel(0);
   }
 
   /**
    * parse and load a map resources
    * @param  {int} level level id of the map to load
    */
-  load(level){
+  loadLevel(level){
     var data = this.maps[level];
 
     //reset the map variables
     this.tile = [];
     this.enemies = [];
     this.enemyMoves = 0;
-    this.mapAssetGroup = this.game.add.group();
 
     // loop through map data
     for (var y = 0; y < data.length; y++) {
       for (var x = 0; x < data[y].length; x++) {
+        var skip = false;
         var tile = data[y][x],
             tileHex = 0x0,
             tileSprite = null,
@@ -43,6 +47,7 @@ class map{
         switch (tile) {
           // add exit and entrance
           case "S": // start
+            skip = true;
           case "X": // exit
             var direction = 'D';
             if (x == 0) {
@@ -52,7 +57,12 @@ class map{
             } else if (y == 7) {
               direction = "U";
             }
-            this.door = new Door(this.game, x, y, direction, (tile === 'X'));
+            var door = new Door(this.game, x, y, direction, (tile === 'X'));
+            if (!skip) {
+              this.door = door
+              this.mapAssetGroup.add(door.sprite);
+            }
+            door.sprite.depth = y * 100;
             break;
           case "M": // mummy
             var enemy = new Player(this, 'mummy', x, y);
@@ -91,6 +101,18 @@ class map{
       }
     }
     this.updateZIndexes();
+    this.fg.bringToTop();
+  }
+
+  nextLevel(){
+    this.mapAssetGroup.removeAll(true);
+    this.loadLevel(++this.currentLevel);
+  }
+
+  showLevelCompleteDialog() {
+    setTimeout(() => {
+      this.nextLevel();
+    }, 1000);
   }
 
   updateZIndexes(){
@@ -101,6 +123,11 @@ class map{
    * trigger the movement of enemies
    */
   playerMoveComplete() {
+    if (this.player.mapPos.x == this.door.mapPos.x && this.player.mapPos.y == this.door.mapPos.y){
+      this.door.close();
+      this.door.onAnimationComplete.addOnce(this.showLevelCompleteDialog, this);
+      return;
+    }
     if (this.enemies.length > 0) {
       this.enemyMoves = 2;
       this.enemies.forEach((enemy) => {
@@ -192,6 +219,7 @@ class map{
     }
     try{
       if (this.tile[nextTilePos.x][nextTilePos.y].name === '#' ||
+          this.tile[nextTilePos.x][nextTilePos.y].name === 'S' ||
           (this.tile[checkPos.x][checkPos.y].hex & dirHex) > 0x0) {
         return false;
       }
