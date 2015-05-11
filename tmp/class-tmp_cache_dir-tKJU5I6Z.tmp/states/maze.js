@@ -11,7 +11,7 @@ define('states/maze', ['exports', 'phaser-game-state', 'phaser-game', 'phaser', 
     create() {
       this.map = new Map['default'](this);
 
-      this.map.load(2);
+      this.map.load(0);
 
       cursors = this.input.keyboard.createCursorKeys();
       space = this.input.keyboard.addKey(Phaser['default'].Keyboard.SPACEBAR);
