@@ -15,6 +15,7 @@ class Preload extends PhaserGameState{
 
   preload (){
     this.load.image('stage', 'assets/stage.png');
+    this.load.image('coin', 'assets/coin.png');
     //stage_outer.png
     this.load.json('maps', 'assets/maps.json');
     this.load.atlasJSONHash('mummy', 'assets/mummy.png', 'assets/mummy.json');

@@ -1,6 +1,7 @@
 import Player from './player';
 import Door from './door';
 import Tile from './tile';
+import Coin from './coin';
 
 /**
  * class for map parseing and resource loading
@@ -52,6 +53,10 @@ class map{
             }
             this.door = new Door(this.game, x, y, direction, (tile === 'X'));
             //this.mapAssetGroup.add(this.door[0].sprite);
+            break;
+          case "T":
+            this.coin = new Coin(this.game, x, y);
+            // this.treasures.push(this.coin);
             break;
           case "M": // mummy
             var enemy = new Player(this, 'mummy', x, y);
