@@ -1,1 +1,0 @@
-/Users/bng/curse-mummy-maze-folk/src/objects/coin.js

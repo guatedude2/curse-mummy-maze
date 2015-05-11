@@ -1,1 +1,0 @@
-/usr/local/lib/node_modules/pixijs-cli/lib/helpers/loader.js
