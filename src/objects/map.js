@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import Player from './player';
 import Door from './door';
 import Tile from './tile';
+import Coin from './coin';
 
 /**
  * class for map parseing and resource loading
@@ -63,6 +64,10 @@ class map{
               this.mapAssetGroup.add(door.sprite);
             }
             door.sprite.depth = y * 100;
+            break;
+          case "T":
+            this.coin = new Coin(this.game, x, y);
+            // this.treasures.push(this.coin);
             break;
           case "M": // mummy
             var enemy = new Player(this, 'mummy', x, y);
