@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Player from './player';
+import Fight from './fight';
 import Door from './door';
 import Tile from './tile';
 import Coin from './coin';
@@ -30,6 +31,7 @@ class map{
     //reset the map variables
     this.tile = [];
     this.enemies = [];
+    this.treasures = [];
     this.enemyMoves = 0;
 
     // loop through map data
@@ -47,8 +49,6 @@ class map{
         // check tile type
         switch (tile) {
           // add exit and entrance
-          case "S": // start
-            skip = true;
           case "X": // exit
             var direction = 'D';
             if (x == 0) {
@@ -58,19 +58,22 @@ class map{
             } else if (y == 7) {
               direction = "U";
             }
-            var door = new Door(this.game, x, y, direction, (tile === 'X'));
-            if (!skip) {
-              this.door = door
-              this.mapAssetGroup.add(door.sprite);
+            if (this.door) {
+              throw new Error('Map cannot contain more than one exit!');
             }
-            door.sprite.depth = y * 100;
+            this.door = new Door(this.game, x, y, direction, false);
+            this.mapAssetGroup.add(this.door.sprite);
+            this.door.sprite.depth = y * 100;
             break;
           case "T":
-            this.coin = new Coin(this.game, x, y);
-            // this.treasures.push(this.coin);
+            var coin = new Coin(this.game, x, y);
+            this.mapAssetGroup.add(coin.sprite);
+            coin.sprite.depth = y * 100 + 9;
+            this.treasures.push(coin);
             break;
           case "M": // mummy
-            var enemy = new Player(this, 'mummy', x, y);
+            var enemy = new Player(this, 'mummy', x, y, 'D', true);
+            enemy.index = this.enemies.length;
             this.enemies.unshift(enemy);
             enemy.onMovingComplete.add(this.aiMoveComplete, this);
             this.mapAssetGroup.add(enemy.sprite);
@@ -107,11 +110,24 @@ class map{
     }
     this.updateZIndexes();
     this.fg.bringToTop();
+    if (this.treasures.length > 0) {
+      this.door.setClosed(true);
+    }
+    this.game.sound.play('start', 0.5);
   }
 
-  nextLevel(){
+  nextLevel() {
+    this.door.destroy();
+    this.door = null;
     this.mapAssetGroup.removeAll(true);
     this.loadLevel(++this.currentLevel);
+  }
+
+  restartLevel() {
+    this.door.destroy();
+    this.door = null;
+    this.mapAssetGroup.removeAll(true);
+    this.loadLevel(this.currentLevel);
   }
 
   showLevelCompleteDialog() {
@@ -125,13 +141,26 @@ class map{
   }
 
   /**
-   * trigger the movement of enemies
+   * end of player move and trigger the movement of enemies
    */
   playerMoveComplete() {
+    this.player.canMove = false;
     if (this.player.mapPos.x == this.door.mapPos.x && this.player.mapPos.y == this.door.mapPos.y){
+      this.player.alpha = 0;
       this.door.close();
       this.door.onAnimationComplete.addOnce(this.showLevelCompleteDialog, this);
       return;
+    }
+    if (this.treasures.length > 0) {
+      this.treasures.forEach((treasure, index) => {
+        if (this.player.mapPos.x === treasure.mapPos.x && this.player.mapPos.y === treasure.mapPos.y) {
+          treasure.destroy();
+          this.treasures.splice(index, 1);
+        }
+      });
+      if (this.treasures.length === 0) {
+        this.door.open();
+      }
     }
     if (this.enemies.length > 0) {
       this.enemyMoves = 2;
@@ -143,6 +172,10 @@ class map{
     }
   }
 
+  /**
+   * moves a given enemy closer to the player
+   * @param  {Object} enemy the enemy to move
+   */
   aiFollowPlayer(enemy) {
     var playerPos = this.player.mapPos;
     var enemyPos = enemy.mapPos;
@@ -179,15 +212,50 @@ class map{
     }
   }
 
+  /**
+   * moves AI players
+   */
   aiMoveComplete() {
+    var playerPos = this.player.mapPos;
     var allFinished = true;
     this.enemies.forEach((enemy) => {
       if (enemy.isMoving) allFinished = false;
+      if (enemy.mapPos.x === playerPos.x && enemy.mapPos.y === playerPos.y) {
+        this.player.sprite.alpha = 0;
+        enemy.sprite.alpha = 0;
+        this.fight = new Fight(this.game, enemy.mapPos.x, enemy.mapPos.y, () => {
+          this.player.setIsDead();
+          this.player.sprite.alpha = 1;
+          setTimeout(() => {
+            this.restartLevel();
+          }, 2000);
+        });
+        allFinished = false;
+      }
     });
     if (allFinished && --this.enemyMoves > 0) {
       this.enemies.forEach((enemy) => {
         this.aiFollowPlayer(enemy);
       });
+    } else if (allFinished) {
+      //TODO: 2 or more mummies fighting
+      // this.enemies.forEach((enemy) => {
+      //   this.enemies.forEach( (enemy2) => {
+      //     if (enemy.index !== enemy2.index &&
+      //         enemy.sprite.alpha === 1 && enemy2.sprite.alpha === 1 &&
+      //         enemy.mapPos.x === enemy2.mapPos.x &&
+      //         enemy.mapPos.y === enemy2.mapPos.y) {
+      //       enemy.sprite.alpha = 0;
+      //       enemy2.sprite.alpha = 0;
+      //       this.fight = new Fight(this.game, enemy.mapPos.x, enemy.mapPos.y, () => {
+      //         this.sprite.alpha = 1;
+      //         this.enemies.splice(enemy2.index, 1);
+      //         //enemy2.destroy();
+      //       });
+      //     }
+      //   });
+      // });
+      this.player.canMove = true;
     }
   }
 

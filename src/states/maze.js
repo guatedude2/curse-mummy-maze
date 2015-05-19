@@ -7,6 +7,7 @@ var cursors, space;
 
 class Preload extends PhaserGameState{
   constructor(game) {
+    this.game = game;
   }
 
   create() {
@@ -14,6 +15,7 @@ class Preload extends PhaserGameState{
 
     cursors = this.input.keyboard.createCursorKeys();
     space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    this.game.sound.play('music', 0.75, true);
   }
 
   update() {
