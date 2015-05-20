@@ -14,6 +14,7 @@ class Door{
     var config = OFFSET[direction];
     this.mapPos = { x: x, y: y };
     this.game = game;
+    this.isClosed = closed;
     this.sprite = game.add.sprite(
       x * TILE_WIDTH + config.x,
       y * TILE_HEIGHT+ config.y,
@@ -51,15 +52,18 @@ class Door{
 
   setClosed(val){
     this.door.frameName = (val ? 'door1.png' : 'door4.png');
+    this.isClosed = val;
   }
 
   open(){
     this.game.sound.play('door_open', 1);
+    this.isClosed = false;
     this.door.animations.play('open');
   }
 
   close(){
     this.game.sound.play('door_close', 1);
+    this.isClosed = true;
     this.door.animations.play('close');
   }
 

@@ -117,6 +117,7 @@ class map{
   }
 
   nextLevel() {
+    //TODO: CHECK LAST LEVEL
     this.door.destroy();
     this.door = null;
     this.mapAssetGroup.removeAll(true);
@@ -292,7 +293,7 @@ class map{
     }
     try{
       if (this.tile[nextTilePos.x][nextTilePos.y].name === '#' ||
-          this.tile[nextTilePos.x][nextTilePos.y].name === 'S' ||
+          (this.tile[nextTilePos.x][nextTilePos.y].name === 'X' && this.door.isClosed) ||
           (this.tile[checkPos.x][checkPos.y].hex & dirHex) > 0x0) {
         return false;
       }

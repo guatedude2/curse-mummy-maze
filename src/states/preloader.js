@@ -32,7 +32,7 @@ class Preload extends PhaserGameState{
     this.load.audio('step_enemy', 'assets/sounds/step_enemy.mp3');
     this.load.audio('door_open', 'assets/sounds/door_open.mp3');
     this.load.audio('door_close', 'assets/sounds/door_close.mp3');
-    this.load.audio('music', 'assets/sounds/music.mp3');
+    this.load.audio('music', 'assets/sounds/music_ingame.mp3');
   }
 
   create() {
