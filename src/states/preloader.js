@@ -1,15 +1,8 @@
 import PhaserGameState from 'phaser-game-state';
 import PhaserGame from 'phaser-game';
 
-var tempArray = ['walk_down', 'walk_right', 'walk_up', 'walk_left'];
-var tempIndex = 1;
-var cursors;
-
 class Preload extends PhaserGameState{
   constructor(game) {
-    this.background = null;
-    this.preloadBar = null;
-
     this.ready = false;
   }
 
