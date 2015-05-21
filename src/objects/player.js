@@ -19,83 +19,13 @@ class Player{
       'down_stand.png'
     );
 
-    this.sprite.animations.add('walk_down', [
-      'down_walk1.png',
-      'down_stand.png',
-      'down_walk2.png',
-      'down_stand.png'
-    ], 7, true, false);
-    this.sprite.animations.add('walk_up', [
-      'up_walk1.png',
-      'up_stand.png',
-      'up_walk2.png',
-      'up_stand.png'
-    ], 7, true, false);
-    this.sprite.animations.add('walk_left', [
-      'left_walk1.png',
-      'left_stand.png',
-      'left_walk2.png',
-      'left_stand.png'
-    ], 7, true, false);
-    this.sprite.animations.add('walk_right', [
-      'right_walk1.png',
-      'right_stand.png',
-      'right_walk2.png',
-      'right_stand.png'
-    ], 7, true, false);
+    //TODO: add animations to player
 
     this.stepSound = this.game.sound.add(this.isAI ? 'step_enemy' : 'step', 1, true);
   }
 
   move(direction) {
-    if (!this.isMoving && this.canMove) {
-      var tweenTo = null;
-      var isWalkable = this.map.isWalkable(this.mapPos.x, this.mapPos.y, direction);
-      this.moveDirection = direction;
-      switch (direction) {
-        case 'up':
-          if (isWalkable) {
-            this.mapPos.y--;
-            this.sprite.animations.play('walk_up');
-            tweenTo = {y: this.mapPos.y * TILE_WIDTH + OFFSET.y };
-          }
-          break;
-        case 'down':
-          if (isWalkable) {
-            this.mapPos.y++;
-            this.sprite.animations.play('walk_down');
-            tweenTo = {y: this.mapPos.y * TILE_WIDTH + OFFSET.y };
-          }
-          break;
-        case 'right':
-          if (isWalkable) {
-            this.mapPos.x++;
-            this.sprite.animations.play('walk_right');
-            tweenTo = {x: this.mapPos.x * TILE_WIDTH + OFFSET.x };
-          }
-          break;
-        case 'left':
-          if (isWalkable) {
-            this.mapPos.x--;
-            this.sprite.animations.play('walk_left');
-            tweenTo = {x: this.mapPos.x * TILE_WIDTH + OFFSET.x };
-          }
-          break;
-        case 'skip':
-          this.isMoving = true;
-          this.movingComplete();
-          break;
-      }
-      if (tweenTo){
-        this.sprite.depth = this.mapPos.y * 100 + 10;
-        this.map.updateZIndexes();
-        this.tween = this.game.add.tween(this.sprite);
-        this.tween.to(tweenTo, 400, "Linear", true);
-        this.tween.onComplete.add(this.movingComplete, this);
-        this.isMoving = true;
-        this.stepSound.play();
-      }
-    }
+    //TODO: add move logic and tween moves
   }
 
   lookAt(direction) {

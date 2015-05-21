@@ -6,14 +6,8 @@ class Tile{
   constructor(game, x, y, tile, hexValue, spriteName){
     this.hex = hexValue;
     this.name = tile;
-    if (spriteName) {
-      this.sprite = game.add.sprite(
-        x * TILE_WIDTH + OFFSET.x,
-        y * TILE_HEIGHT + OFFSET.y,
-        'walls',
-        spriteName + '.png'
-      );
-    }
+
+    //TODO: add tile sprite
   }
 
 }

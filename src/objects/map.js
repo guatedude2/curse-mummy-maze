@@ -1,11 +1,7 @@
 import Phaser from 'phaser';
 import Hud from './hud';
-import GameOver from './game-over';
 import Player from './player';
-import Fight from './fight';
-import Door from './door';
 import Tile from './tile';
-import Coin from './coin';
 
 /**
  * class for map parseing and resource loading
@@ -76,24 +72,13 @@ class map{
             if (this.door) {
               throw new Error('Map cannot contain more than one exit!');
             }
-            this.door = new Door(this.game, x, y, direction, false);
-            this.mapAssetGroup.add(this.door.sprite);
-            this.mapAssetGroup.add(this.door.door);
-            this.door.sprite.depth = y * 100;
+            //TODO: add door
             break;
           case "T":
-            var coin = new Coin(this.game, x, y);
-            this.mapAssetGroup.add(coin.sprite);
-            coin.sprite.depth = y * 100 + 9;
-            this.treasures.push(coin);
+            //TODO: add coin
             break;
           case "M": // mummy
-            var enemy = new Player(this, 'mummy', x, y, 'D', true);
-            enemy.index = this.enemies.length;
-            this.enemies.unshift(enemy);
-            enemy.onMovingComplete.add(this.aiMoveComplete, this);
-            this.mapAssetGroup.add(enemy.sprite);
-            enemy.sprite.depth = y * 100 + 12;
+            //TODO: add mummy
             break;
           case "P": // player
             this.player = new Player(this, 'hero', x, y, 'D');
@@ -255,10 +240,8 @@ class map{
             } else {
               this.music.stop();
               var endMusic = this.game.sound.play('music_end', 1, false);
-              this.gameOver = new GameOver(this.game);
-              setTimeout(() => {
-                this.game.state.start('MainMenu');
-              }, 28000);
+              //TODO: add game over images
+              this.game.state.start('MainMenu');
             }
           }, 1750);
         });

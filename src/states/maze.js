@@ -14,12 +14,7 @@ class Preload extends PhaserGameState{
   create() {
     this.map = new Map(this.game);
 
-    this.touchControl = this.game.plugins.add(PhaserTouchControl);
-    this.touchControl.settings.maxDistanceInPixels = 50;
-    this.touchControl.inputEnable({
-      x: 65,
-      y: 255
-    });
+    //TODO: add touch controls
 
     cursors = this.input.keyboard.createCursorKeys();
     space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -27,13 +22,13 @@ class Preload extends PhaserGameState{
 
   update() {
     if (this.map.enemyMoves <= 1) {
-      if (cursors.up.isDown || this.touchControl.cursors.up) {
+      if (cursors.up.isDown) {
         this.map.player.move('up');
-      } else if (cursors.down.isDown || this.touchControl.cursors.down) {
+      } else if (cursors.down.isDown) {
         this.map.player.move('down');
-      } else if (cursors.right.isDown || this.touchControl.cursors.right) {
+      } else if (cursors.right.isDown) {
         this.map.player.move('right');
-      } else if (cursors.left.isDown || this.touchControl.cursors.left) {
+      } else if (cursors.left.isDown) {
         this.map.player.move('left');
       } else if (space.isDown) {
         this.map.player.move('skip');
