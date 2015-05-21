@@ -27,6 +27,8 @@ class map{
     this.currentLevel = startLevel || 0;
     this.lives = 3;
 
+    this.music = this.game.sound.play('music_ingame', 1, true);
+
     this.hud = new Hud(this.game);
     this.loadLevel(0);
   }
@@ -251,9 +253,14 @@ class map{
             if (this.lives >= 0) {
               this.restartLevel();
             } else {
+              this.music.stop();
+              var endMusic = this.game.sound.play('music_end', 1, false);
               this.gameOver = new GameOver(this.game);
+              setTimeout(() => {
+                this.game.state.start('MainMenu');
+              }, 28000);
             }
-          }, 2000);
+          }, 1750);
         });
         this.mapAssetGroup.add(this.fight.sprite);
         allFinished = false;

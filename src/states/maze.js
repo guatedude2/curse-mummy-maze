@@ -23,7 +23,6 @@ class Preload extends PhaserGameState{
 
     cursors = this.input.keyboard.createCursorKeys();
     space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.music = this.game.sound.play('music_ingame', 1, true);
   }
 
   update() {
