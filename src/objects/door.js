@@ -43,6 +43,7 @@ class Door{
     this.sprite.anchor.set(0.5, 0.5);
     this.door.angle = config.angle;
     this.door.anchor.set(0.5, 0.5);
+    this.door.depth = 1000;
     this.onAnimationComplete = new Phaser.Signal();
   }
 

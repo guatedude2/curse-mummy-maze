@@ -83,7 +83,7 @@ PhaserGame.Boot.prototype = {
 
     PhaserGame.orientated = false;
 
-    document.getElementById('orientation').style.display = 'block';
+    //document.getElementById('orientation').style.display = 'block';
 
   },
 
@@ -91,8 +91,8 @@ PhaserGame.Boot.prototype = {
 
     PhaserGame.orientated = true;
 
-    document.getElementById('orientation').style.display = 'none';
-  this.scaleStage();
+    //document.getElementById('orientation').style.display = 'none';
+    this.scaleStage();
   }
 
 };
@@ -103,29 +103,29 @@ PhaserGame.screen = "small";
 PhaserGame.srx = Math.max(window.innerWidth,window.innerHeight);
 PhaserGame.sry = Math.min(window.innerWidth,window.innerHeight);
 
-PhaserGame.logicWidth = 720;
-PhaserGame.logicHeight = 1330;
+PhaserGame.logicWidth = 1920;
+PhaserGame.logicHeight = 1080;
 var r = PhaserGame.logicWidth/PhaserGame.logicHeight;
-if(PhaserGame.srx >= 360){
-  PhaserGame.screen = "small";
-  PhaserGame.gameWidth = 360;
-}
-if(PhaserGame.srx >= 480){
-  PhaserGame.screen = "normal";
-  PhaserGame.gameWidth = 480;
-}
-if(PhaserGame.srx >= 720){
-  PhaserGame.screen = "large";
-  PhaserGame.gameWidth = 720;
-}
-if(PhaserGame.srx >= 960){
-  PhaserGame.screen = "xlarge";
-  PhaserGame.gameWidth = 960;
-}
-if(PhaserGame.srx >= 1440){
-  PhaserGame.screen = "xxlarge";
-  PhaserGame.gameWidth = 1440;
-}
+// if(PhaserGame.srx >= 360){
+//   PhaserGame.screen = "small";
+//   PhaserGame.gameWidth = 360;
+// }
+// if(PhaserGame.srx >= 480){
+//   PhaserGame.screen = "normal";
+//   PhaserGame.gameWidth = 480;
+// }
+// if(PhaserGame.srx >= 720){
+//   PhaserGame.screen = "large";
+//   PhaserGame.gameWidth = 720;
+// }
+// if(PhaserGame.srx >= 960){
+//   PhaserGame.screen = "xlarge";
+//   PhaserGame.gameWidth = 960;
+// }
+// if(PhaserGame.srx >= 1440){
+//   PhaserGame.screen = "xxlarge";
+//   PhaserGame.gameWidth = 1440;
+// }
 
 //If on deskop, we may need to fix the maximum resolution instead of scaling the game to the full monitor resolution
 var device = Phaser.Device;

@@ -12,10 +12,15 @@ import Coin from './coin';
 class map{
   constructor(game, startLevel){
     this.game = game;
-    this.bg = game.add.image(0, 0, 'stage_bg');
+    this.mapGroup = this.game.add.group();
+    this.mapGroup.x = 134;
+    this.bg = game.add.image(-134, 0, 'stage_bg');
+    this.mapGroup.add(this.bg);
     this.fg = game.add.image(0, 0, 'stage_fg');
+    this.mapGroup.add(this.fg);
     this.maps = game.cache.getJSON('maps').maps;
     this.mapAssetGroup = this.game.add.group();
+    this.mapGroup.add(this.mapAssetGroup);
     this.enemyMoving = false;
     this.currentLevel = startLevel || 0;
     this.loadLevel(0);
@@ -63,6 +68,7 @@ class map{
             }
             this.door = new Door(this.game, x, y, direction, false);
             this.mapAssetGroup.add(this.door.sprite);
+            this.mapAssetGroup.add(this.door.door);
             this.door.sprite.depth = y * 100;
             break;
           case "T":
@@ -231,6 +237,7 @@ class map{
             this.restartLevel();
           }, 2000);
         });
+        this.mapAssetGroup.add(this.fight.sprite);
         allFinished = false;
       }
     });

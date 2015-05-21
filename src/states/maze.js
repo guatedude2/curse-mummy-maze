@@ -17,7 +17,10 @@ class Preload extends PhaserGameState{
     this.touchControl = this.game.plugins.add(PhaserTouchControl);
     this.touchControl.settings.singleDirection = true;
     this.touchControl.settings.maxDistanceInPixels = 50;
-    this.touchControl.inputEnable();
+    this.touchControl.inputEnable({
+      x: 65,
+      y: 255
+    });
 
     cursors = this.input.keyboard.createCursorKeys();
     space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);

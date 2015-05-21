@@ -1,0 +1,16 @@
+2015-05-20 00:44:43.523 mummymaze[717:9435] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/Alex/Library/Developer/CoreSimulator/Devices/0752E251-1610-4CFA-A6E0-BA993BFC4457/data/Containers/Data/Application/3F998D37-E948-4B51-8793-92B900D2154C/Library/Cookies/Cookies.binarycookies
+2015-05-20 00:44:43.893 mummymaze[717:9435] Apache Cordova native platform version 3.8.0 is starting.
+2015-05-20 00:44:43.893 mummymaze[717:9435] Multi-tasking -> Device: YES, App: YES
+2015-05-20 00:44:43.915 mummymaze[717:9435] Unlimited access to network resources
+2015-05-20 00:44:43.926 mummymaze[717:9435] 
+
+Started backup to iCloud! Please be careful.
+Your application might be rejected by Apple if you store too much data.
+For more information please read "iOS Data Storage Guidelines" at:
+https://developer.apple.com/icloud/documentation/data-storage/
+To disable web storage backup to iCloud, set the BackupWebStorage preference to "local" in the Cordova config.xml file
+
+2015-05-20 00:44:44.634 mummymaze[717:9435] ERROR: Start Page at 'www/index.html' was not found.
+2015-05-20 00:44:44.962 mummymaze[717:9435] Resetting plugins due to page load.
+2015-05-20 00:44:45.006 mummymaze[717:9435] Finished load of: about:blank
+2015-05-20 00:44:49.243 mummymaze[717:9489] Terminating since there is no system app.

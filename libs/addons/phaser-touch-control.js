@@ -36,18 +36,10 @@ var TouchControl = function (game, parent) {
   Phaser.Plugin.call(this, game, parent);
   this.input = this.game.input;
 
-  this.imageGroup = [];
-
-  this.imageGroup.push(this.game.add.sprite(0, 0, 'compass'));
-  this.imageGroup.push(this.game.add.sprite(0, 0, 'touch_segment'));
-  this.imageGroup.push(this.game.add.sprite(0, 0, 'touch_segment'));
-  this.imageGroup.push(this.game.add.sprite(0, 0, 'touch'));
-
-  this.imageGroup.forEach(function (e) {
-    e.anchor.set(0.5);
-    e.visible=false;
-    e.fixedToCamera=true;
-  });
+  this.image = this.game.add.sprite(0, 0, 'dpad');
+  this.image.anchor.set(0.5);
+  this.image.visible=false;
+  this.image.fixedToCamera=true;
 };
 
 //Extends the Phaser.Plugin template, setting up values we need
@@ -69,9 +61,21 @@ TouchControl.prototype.speed = {
   x:0, y:0
 };
 
-TouchControl.prototype.inputEnable = function() {
-  this.input.onDown.add(createCompass, this);
-  this.input.onUp.add(removeCompass, this);
+TouchControl.prototype.inputEnable = function(pos) {
+  if (pos) {
+    this.staticPosition = new Phaser.Point(pos.x, pos.y);
+    this.input.onDown.add(staticCompassStart, this);
+    this.input.onUp.add(staticCompassEnd, this);
+    this.image.visible=true;
+    this.image.bringToTop();
+
+    this.image.cameraOffset.x=pos.x;
+    this.image.cameraOffset.y=pos.y;
+
+  } else {
+    this.input.onDown.add(createCompass, this);
+    this.input.onUp.add(removeCompass, this);
+  }
 };
 
 TouchControl.prototype.inputDisable = function() {
@@ -81,24 +85,18 @@ TouchControl.prototype.inputDisable = function() {
 
 var initialPoint;
 var createCompass = function(){
-  this.imageGroup.forEach(function (e) {
-    e.visible=true;
-    e.bringToTop();
+  this.image.visible=true;
+  this.image.bringToTop();
 
-    e.cameraOffset.x=this.input.worldX;
-    e.cameraOffset.y=this.input.worldY;
-
-  }, this);
+  this.image.cameraOffset.x=this.input.worldX;
+  this.image.cameraOffset.y=this.input.worldY;
 
   this.preUpdate=setDirection.bind(this);
-
   initialPoint=this.input.activePointer.position.clone();
 
 };
 var removeCompass = function () {
-  this.imageGroup.forEach(function(e){
-    e.visible = false;
-  });
+  this.image.visible = false;
 
   this.cursors.up = false;
   this.cursors.down = false;
@@ -109,6 +107,34 @@ var removeCompass = function () {
   this.speed.y = 0;
 
   this.preUpdate=empty;
+};
+
+var staticCompassStart = function (){
+  var d=this.staticPosition.distance(this.input.activePointer.position);
+  var maxDistanceInPixels = this.settings.maxDistanceInPixels;
+
+  if (d < maxDistanceInPixels) {
+    this.preUpdate=setDirection.bind(this);
+    initialPoint=this.staticPosition.clone();
+  }
+};
+
+var staticCompassEnd = function (){
+
+  this.image.bringToTop();
+  this.image.cameraOffset.x=this.staticPosition.x;
+  this.image.cameraOffset.y=this.staticPosition.y;
+
+  this.cursors.up = false;
+  this.cursors.down = false;
+  this.cursors.left = false;
+  this.cursors.right = false;
+
+  this.speed.x = 0;
+  this.speed.y = 0;
+
+  this.preUpdate=empty;
+  this.image.loadTexture('dpad');
 };
 
 var empty = function(){
@@ -142,15 +168,22 @@ var setDirection = function() {
   this.speed.y = parseInt((deltaY/maxDistanceInPixels)*100 * -1, 10);
 
 
-  this.cursors.up = (deltaY < 0);
-  this.cursors.down = (deltaY > 0);
-  this.cursors.left = (deltaX < 0);
-  this.cursors.right = (deltaX > 0);
+  this.cursors.up = (deltaY < -1);
+  this.cursors.down = (deltaY > 1);
+  this.cursors.left = (deltaX < -1);
+  this.cursors.right = (deltaX > 1);
 
-  this.imageGroup.forEach(function(e,i){
-    e.cameraOffset.x = initialPoint.x+(deltaX)*i/3;
-    e.cameraOffset.y = initialPoint.y+(deltaY)*i/3;
-  }, this);
+  if (this.cursors.up) {
+    this.image.angle = -90;
+  } else if (this.cursors.down){
+    this.image.angle = 90;
+  } else if (this.cursors.left){
+    this.image.angle = 180;
+  } else if (this.cursors.right){
+    this.image.angle = 0;
+
+  }
+  this.image.loadTexture('dpad_down');
 
 };
 TouchControl.prototype.preUpdate = empty;

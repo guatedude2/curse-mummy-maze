@@ -5,7 +5,7 @@ import MainMenu from './states/main-menu';
 import Maze from './states/maze';
 
 
-var game = new Phaser.Game(317, 317 * 1330/720, Phaser.AUTO, 'game');
+var game = new Phaser.Game(317*1920/1080, 317, Phaser.AUTO, 'game');
 
 game.antialias = false;
 

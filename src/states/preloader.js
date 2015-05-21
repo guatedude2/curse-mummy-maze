@@ -14,6 +14,15 @@ class Preload extends PhaserGameState{
   }
 
   preload (){
+    this.load.image('menu_bg', 'assets/menu_bg.png');
+    this.load.image('menu_mummy', 'assets/menu_mummy.png');
+    this.load.image('menu_hero', 'assets/menu_hero.png');
+    this.load.image('menu_text', 'assets/menu_text.png');
+    this.load.image('button_start', 'assets/button_start.png');
+
+    this.load.image('dpad', 'assets/dpad.png');
+    this.load.image('dpad_down', 'assets/dpad_down.png');
+
     this.load.image('stage_bg', 'assets/stage.png');
     this.load.image('stage_fg', 'assets/stage_outer.png');
 
@@ -37,7 +46,8 @@ class Preload extends PhaserGameState{
 
   create() {
     this.ready = true;
-    this.state.start('Maze');
+    this.state.start('MainMenu');
+    //this.state.start('Maze');
   }
 
   update() {
