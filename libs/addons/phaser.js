@@ -1,7 +1,6 @@
 var Phaser;
 if (window.Phaser) {
   Phaser = window.Phaser;
-  delete window.Phaser;
 }else{
   throw new Error("Phaser engine not found!");
 }

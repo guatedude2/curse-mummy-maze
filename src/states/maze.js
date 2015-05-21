@@ -12,10 +12,9 @@ class Preload extends PhaserGameState{
   }
 
   create() {
-    this.map = new Map(this);
+    this.map = new Map(this.game);
 
     this.touchControl = this.game.plugins.add(PhaserTouchControl);
-    this.touchControl.settings.singleDirection = true;
     this.touchControl.settings.maxDistanceInPixels = 50;
     this.touchControl.inputEnable({
       x: 65,
@@ -24,7 +23,7 @@ class Preload extends PhaserGameState{
 
     cursors = this.input.keyboard.createCursorKeys();
     space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.game.sound.play('music', 1, true);
+    this.music = this.game.sound.play('music_ingame', 1, true);
   }
 
   update() {

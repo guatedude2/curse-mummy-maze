@@ -19,7 +19,12 @@ class Preload extends PhaserGameState{
     this.load.image('menu_hero', 'assets/menu_hero.png');
     this.load.image('menu_text', 'assets/menu_text.png');
     this.load.image('button_start', 'assets/button_start.png');
+    this.load.image('gameover', 'assets/gameover.png');
 
+    this.load.bitmapFont('adventure_font', 'assets/font.png', 'assets/font.fnt');
+
+    this.load.image('life', 'assets/hero_life.png');
+    this.load.image('level_dot', 'assets/level_dot.png');
     this.load.image('dpad', 'assets/dpad.png');
     this.load.image('dpad_down', 'assets/dpad_down.png');
 
@@ -41,7 +46,8 @@ class Preload extends PhaserGameState{
     this.load.audio('step_enemy', 'assets/sounds/step_enemy.mp3');
     this.load.audio('door_open', 'assets/sounds/door_open.mp3');
     this.load.audio('door_close', 'assets/sounds/door_close.mp3');
-    this.load.audio('music', 'assets/sounds/music_ingame.mp3');
+    this.load.audio('music_ingame', 'assets/sounds/music_ingame.mp3');
+    this.load.audio('music_menu', 'assets/sounds/music_menu.mp3');
   }
 
   create() {

@@ -1,4 +1,6 @@
 import Phaser from 'phaser';
+import Hud from './hud';
+import GameOver from './game-over';
 import Player from './player';
 import Fight from './fight';
 import Door from './door';
@@ -23,6 +25,9 @@ class map{
     this.mapGroup.add(this.mapAssetGroup);
     this.enemyMoving = false;
     this.currentLevel = startLevel || 0;
+    this.lives = 3;
+
+    this.hud = new Hud(this.game);
     this.loadLevel(0);
   }
 
@@ -32,6 +37,9 @@ class map{
    */
   loadLevel(level){
     var data = this.maps[level];
+
+    this.hud.setLives(this.lives);
+    this.hud.setLevel(level + 1);
 
     //reset the map variables
     this.tile = [];
@@ -119,6 +127,8 @@ class map{
     if (this.treasures.length > 0) {
       this.door.setClosed(true);
     }
+    this.hud.setCoinsLeft(this.treasures.length);
+    this.hud.startTimer();
     this.game.sound.play('start', 0.5);
   }
 
@@ -153,6 +163,7 @@ class map{
   playerMoveComplete() {
     this.player.canMove = false;
     if (this.player.mapPos.x == this.door.mapPos.x && this.player.mapPos.y == this.door.mapPos.y){
+      this.hud.stopTimer();
       this.player.alpha = 0;
       this.door.close();
       this.door.onAnimationComplete.addOnce(this.showLevelCompleteDialog, this);
@@ -163,6 +174,7 @@ class map{
         if (this.player.mapPos.x === treasure.mapPos.x && this.player.mapPos.y === treasure.mapPos.y) {
           treasure.destroy();
           this.treasures.splice(index, 1);
+          this.hud.setCoinsLeft(this.treasures.length);
         }
       });
       if (this.treasures.length === 0) {
@@ -230,11 +242,17 @@ class map{
       if (enemy.mapPos.x === playerPos.x && enemy.mapPos.y === playerPos.y) {
         this.player.sprite.alpha = 0;
         enemy.sprite.alpha = 0;
+        this.hud.stopTimer();
         this.fight = new Fight(this.game, enemy.mapPos.x, enemy.mapPos.y, () => {
           this.player.setIsDead();
           this.player.sprite.alpha = 1;
           setTimeout(() => {
-            this.restartLevel();
+            this.lives--;
+            if (this.lives >= 0) {
+              this.restartLevel();
+            } else {
+              this.gameOver = new GameOver(this.game);
+            }
           }, 2000);
         });
         this.mapAssetGroup.add(this.fight.sprite);

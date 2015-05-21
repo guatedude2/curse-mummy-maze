@@ -49,7 +49,7 @@ TouchControl.prototype.constructor = TouchControl;
 TouchControl.prototype.settings = {
   // max distance from itial touch
   maxDistanceInPixels: 200,
-  singleDirection: false
+  singleDirection: true
 };
 
 
